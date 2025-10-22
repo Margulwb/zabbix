@@ -1,0 +1,19 @@
+PidFile=/run/zabbix/zabbix_agent2.pid
+LogFile=/var/log/zabbix/zabbix_agent2.log
+LogFileSize=0
+
+Hostname={{ inventory_hostname }}
+Server={{ zabbix_server }}
+ServerActive={{ zabbix_server }}
+
+{% if connect_method is not defined or connect_method == 'unencrypted' %}
+TLSConnect=unencrypted
+TLSAccept=unencrypted
+{% elif connect_method == 'psk' %}
+TLSConnect=psk
+TLSAccept=psk
+TLSPSKFile={{ tls_psk_file | default('/etc/zabbix/zabbix_agent.psk') }}
+TLSPSKIdentity={{ tls_psk_identity | default('zabbixCentos') }}
+{% endif %}
+
+Include=/etc/zabbix/zabbix_agent2.d/*.conf

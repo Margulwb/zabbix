@@ -1,0 +1,4 @@
+zabbix_agent:
+  hosts:
+    dev:
+      ansible_host: 10.0.1.139

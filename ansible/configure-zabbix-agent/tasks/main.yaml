@@ -1,0 +1,37 @@
+---
+- name: Remove ceph.conf plugin config
+  ansible.builtin.file:
+    path: "/etc/zabbix/zabbix_agent2.d/plugins.d/{{ item }}"
+    state: absent
+  loop:
+    - ceph.conf
+    - docker.conf
+    - modbus.conf 
+    - mqtt.conf 
+    - mysql.conf 
+    - smart.conf 
+    - memcached.conf
+    - mssql.conf  
+    - oracle.conf
+    - redis.conf
+
+- name: Update zabbix_agent2.conf from template
+  ansible.builtin.template:
+    src: zabbix_agent2.conf.j2
+    dest: /etc/zabbix/zabbix_agent2.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart zabbix-agent2
+
+- name: Update plugins.d from template
+  ansible.builtin.template:
+    src: "plugins.d/{{ item }}"
+    dest: "/etc/zabbix/zabbix_agent2.d/plugins.d/{{ item }}"
+    owner: root
+    group: root
+    mode: '0644'
+  loop: 
+    - mongodb.conf
+    - postgresql.conf
+  notify: Restart zabbix-agent2

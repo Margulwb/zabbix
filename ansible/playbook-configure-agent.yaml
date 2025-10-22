@@ -1,0 +1,5 @@
+---
+- hosts: zabbix_agent
+  become: yes
+  roles:
+    - role: configure-zabbix-agent
